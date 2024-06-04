@@ -4,27 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApp2
+namespace crudreal
 {
-    class Fornecedor
+    public class Fornecedor
     {
-        private int Data_registro { get; set; }
-
-        private int Codigo { get; set; }
-
-        private double Contato_principal { get; set; }
-
-        private char Nome_empresa { get; set; }
-
-        private char Status { get; set; }
-
-        private char Estado { get; set; }
-
-        private int Cnpj { get; set; }
-
-        private int Cep { get; set; }
-
-        private char Cidade { get; set; }
-
+        public int Codigo { get; set; }
+        public string Nome_empresa { get; set; }
+        public double Contato_principal { get; set; }
+        public int Data_registro { get; set; }
+        public string Status { get; set; }
+        public string Estado { get; set; }
+        public int Cnpj { get; set; }
+        public int Cep { get; set; }
+        public string Cidade { get; set; }
     }
 }
