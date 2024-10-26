@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css">
+    <title>Dashboard Design #02 | AsmrProg</title>
+</head>
+
+<body>
+
+    <header class="top-container">
+
+        <nav class="nav">
+            <div class="logo">
+                <img src="Img\Terras Mil Logo.jpg"
+            </div>
+
+            <ul class="nav-links">
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Statistics</a></li>
+                <li><a href="#">Courses</a></li>
+                <li><a href="#">Settings</a></li>
+            </ul>
+
+            <section class="right-section">
+                <i class='bx bx-bell'></i>
+                <i class='bx bx-search'></i>
+
+                <div class="profile">
+                    <section class="info">
+                        <img src="assets/profile.png">
+                        <div>
+                            <a href="#">Alex Johnson</a>
+                            <p>Data Scientist</p>
+                        </div>
+                    </section>
+                    <i class='bx bx-chevron-down'></i>
+                </div>
+            </section>
+
+        </nav>
+
+        <section class="status">
+            <header class="header">
+                <h4 id="big">Your courses</h4>
+                <h4 id="small">Weekly Activity</h4>
+            </header>
+
+            <ul class="items-list">
+                <li class="item">
+                    <section class="info">
+                        <div>
+                            <h5>Hortaliças</h5>
+                            <p>- 3 lessons left</p>
+                            <p>- 1 project left</p>
+                        </div>
+                        <i class='bx bx-leaf'></i>
+                    </section>
+                    <div class="progress">
+                        <div class="bar"></div>
+                    </div>
+                </li>
+                <li class="item">
+                    <section class="info">
+                        <div>
+                            <h5>Verduras</h5>
+                            <p>- 2 assignments left</p>
+                            <p>- 5 tutorials left</p>
+                        </div>
+                        <i class='bx bx-terminal'></i>
+                    </section>
+                    <div class="progress">
+                        <div class="bar"></div>
+                    </div>
+                </li>
+                <li class="item">
+                    <section class="info">
+                        <div>
+                            <h5>Legumes</h5>
+                            <p>- 4 chapters left</p>
+                            <p>- 8 quizzes left</p>
+                        </div>
+                        <i class='bx bxl-python'></i>
+                    </section>
+                    <div class="progress">
+                        <div class="bar"></div>
+                    </div>
+                </li>
+                <li class="item">
+                    <canvas class="activity-chart"></canvas>
+                </li>
+            </ul>
+
+        </section>
+
+    </header>
+
+    <main class="bottom-container">
+
+        <section class="prog-status">
+            <header class="header">
+                <h4>Learning Progress</h4>
+                <nav class="tabs">
+                    <a href="#" class="active">1Y</a>
+                    <a href="#">6M</a>
+                    <a href="#">3M</a>
+                </nav>
+            </header>
+
+            <div class="details">
+                <article class="item">
+                    <h2>3.45</h2>
+                    <p>Current GPA</p>
+                </article>
+                <div class="separator"></div>
+                <article class="item">
+                    <h2>4.78</h2>
+                    <p>Class Average GPA</p>
+                </article>
+            </div>
+
+            <canvas class="prog-chart"></canvas>
+
+        </section>
+
+        <aside class="popular">
+            <header class="header">
+                <h4>Popular</h4>
+                <a href="#"># Data</a>
+            </header>
+
+            <img src="assets/podcast.jpg" alt="Podcast">
+            <section class="audio">
+                <i class='bx bx-podcast'></i>
+                <a href="#">Podcast: Mastering Data Visualization</a>
+            </section>
+            <p>Learn to create compelling visualizations with data.</p>
+            <footer class="listen">
+                <section class="author">
+                    <img src="assets/profile.png" alt="Author">
+                    <div>
+                        <a href="#">Alex</a>
+                        <p>Data Analyst</p>
+                    </div>
+                </section>
+                <button>Listen<i class='bx bx-right-arrow-alt'></i></button>
+            </footer>
+
+        </aside>
+
+        <section class="upcoming">
+
+            <header class="header">
+                <h4>You may like it</h4>
+                <a href="#">July <i class='bx bx-chevron-down'></i></a>
+            </header>
+
+            <ul class="dates">
+                <li class="item">
+                    <h5>Mo</h5>
+                    <a href="#">12</a>
+                </li>
+                <li class="item active">
+                    <h5>Tu</h5>
+                    <a href="#">13</a>
+                </li>
+                <li class="item">
+                    <h5>We</h5>
+                    <a href="#">14</a>
+                </li>
+                <li class="item">
+                    <h5>Th</h5>
+                    <a href="#">15</a>
+                </li>
+                <li class="item">
+                    <h5>Fr</h5>
+                    <a href="#">16</a>
+                </li>
+                <li class="item">
+                    <h5>Sa</h5>
+                    <a href="#">17</a>
+                </li>
+                <li class="item">
+                    <h5>Su</h5>
+                    <a href="#">18</a>
+                </li>
+            </ul>
+
+            <section class="events">
+                <article class="item">
+                    <div>
+                        <i class='bx bx-time'></i>
+                        <section class="event-info">
+                            <a href="#">Data Science</a>
+                            <p>10:00-11:30</p>
+                        </section>
+                    </div>
+                    <i class='bx bx-dots-horizontal-rounded'></i>
+                </article>
+                <article class="item">
+                    <div>
+                        <i class='bx bx-time'></i>
+                        <section class="event-info">
+                            <a href="#">Machine Learning</a>
+                            <p>13:30-15:00</p>
+                        </section>
+                    </div>
+                    <i class='bx bx-dots-horizontal-rounded'></i>
+                </article>
+                <article class="item">
+                    <div>
+                        <i class='bx bx-time'></i>
+                        <section class="event-info">
+                            <a href="#">Beginner Python</a>
+                            <p>11:30-13:00</p>
+                        </section>
+                    </div>
+                    <i class='bx bx-dots-horizontal-rounded'></i>
+                </article>
+                <article class="item">
+                    <div>
+                        <i class='bx bx-time'></i>
+                        <section class="event-info">
+                            <a href="#">Introduction to SQL</a>
+                            <p>10:00-11:30</p>
+                        </section>
+                    </div>
+                    <i class='bx bx-dots-horizontal-rounded'></i>
+                </article>
+            </section>
+
+        </section>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+
+</body>
+
+</html>
