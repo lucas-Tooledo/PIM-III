@@ -92,4 +92,4 @@ new Chart(ctx2, {
             easing: 'easeInOutQuad',
         }
     }
-});      
+});
