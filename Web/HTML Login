@@ -4,248 +4,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="style.css">
-    <title>Terras Mil</title>
+    <title>Minimal Login Design | AsmrProg</title>
 </head>
 
 <body>
 
-    <header class="top-container">
+    <div class="logo">
+        <img src="logo.png">
+        <a href="#">AsmrProg</a>
+    </div>
 
-        <nav class="nav">
-            <header class="logo">
-                <i class='bx bxl-codepen'></i>
-                <a href="#">Terras Mil</a>
-            </header>
-        </nav>
+    <div class="container">
+        <h1>Login to your account 👏</h1>
+        <div class="social-login">
+            <button class="google">
+                <i class='bx bxl-google'></i>
+                Use Google
+            </button>
+            <button class="google">
+                <i class='bx bxl-apple'></i>
+                Use Apple
+            </button>
+        </div>
+        <div class="divider">
+            <div class="line"></div>
+            <p>Or</p>
+            <div class="line"></div>
+        </div>
 
-            <ul class="nav-links">
-                <li><a href="#">Dashboard</a></li>
-                <li><a href="#">Produção</a></li>
-                <li><a href="#">Clientes</a></li>
-                <li><a href="#">Fornecedores</a></li>
-            </ul>
-
-            <section class="right-section">
-                <i class='bx bx-bell'></i>
-                <i class='bx bx-search'></i>
-
-                <div class="profile">
-                    <section class="info">
-                        <img src="Img\Ney.jpg">
-                        <div>
-                            <a href="#">Neymar</a>
-                            <p>Funcionário</p>
-                        </div>
-                    </section>
-                    <i class='bx bx-chevron-down'></i>
-                </div>
-            </section>
-
-        </nav>
-
-        <section class="status">
-            <header class="header">
-                <h4 id="big">Produção</h4>
-                <h4 id="small">Semana</h4>
-            </header>
-
-            <ul class="items-list">
-                <li class="item">
-                    <section class="info">
-                        <div>
-                            <h5>Hortaliças</h5>
-                            <p>- Cliente : 1</p>
-
-                            <p>- Fornecedor  : 1</p>
-
-                        </div>
-                        <i class='bx bx-leaf'></i>
-                    </section>
-                    <div class="progress">
-                        <div class="bar"></div>
-                    </div>
-                </li>
-                <li class="item">
-                    <section class="info">
-                        <div>
-                            <h5>Verduras</h5>
-                            <p>- Cliente  : 1</p>
-
-                            <p>- Fornecedor   : 1</p>
-
-                        </div>
-                        <i class='bx bx-lemon'></i>
-                    </section>
-                    <div class="progress">
-                        <div class="bar"></div>
-                    </div>
-                </li>
-                <li class="item">
-                    <section class="info">
-                        <div>
-                            <h5>Frutas</h5>
-                            <p>- Cliente   : 1</p>
-
-                            <p>- Fornecedor   : 1</p>
-
-                        </div>
-                        <i class='bx bxl-cookie'></i>
-                    </section>
-                    <div class="progress">
-                        <div class="bar"></div>
-                    </div>
-                </li>
-                <li class="item">
-                    <canvas class="activity-chart"></canvas>
-                </li>
-            </ul>
-
-        </section>
-
-    </header>
-
-    <main class="bottom-container">
-
-        <section class="prog-status">
-            <header class="header">
-                <h4>Produção em toneladas</h4>
-                <nav class="tabs">
-                    <a href="#" class="active">1Y</a>
-                    <a href="#">6M</a>
-                    <a href="#">3M</a>
-                </nav>
-            </header>
-
-            <div class="details">
-                <article class="item">
-                    <h2>3.45 t</h2>
-                    <p>Atual</p>
-                </article>
-                <div class="separator"></div>
-                <article class="item">
-                    <h2>4.78 t</h2>
-                    <p>Média</p>
-                </article>
+        <form>
+            <label for="email">Email:</label>
+            <div class="custome-input">
+                <input type="email" name="email" placeholder="Your Email" autocomplete="off">
+                <i class='bx bx-at'></i>
             </div>
+            <label for="password">Password:</label>
+            <div class="custome-input">
+                <input type="password" name="password" placeholder="Your Password">
+                <i class='bx bx-lock-alt'></i>
+            </div>
+            <button class="login">Login</button>
+            <div class="links">
+                <a href="#">Reset Password</a>
+                <a href="#">Don't have an account?</a>
+            </div>
+        </form>
 
-            <canvas class="prog-chart"></canvas>
-
-        </section>
-
-        <aside class="popular">
-            <header class="header">
-                <h4>Clientes</h4>
-                <a href="#">Dados</a>
-            </header>
-
-            <img src="Web\Img\OIP.jpg" alt="Produção">
-            <section class="fornecedor">
-                <i class='bx bx-box'></i>
-                <a href="#">Messi: Produção de frutas</a>
-            </section>
-            <p>Código do fornecedor: 7j194o </p>
-            <footer class="listen">
-                <section class="client">
-                    <img src="Img\Cris.jpg" alt="Author">
-                    <div>
-                        <a href="#">Cris</a>
-                        <p>Classe: A</p>
-                    </div>
-                </section>
-                <button>Ver<i class='bx bx-right-arrow-alt'></i></button>
-            </footer>
-
-        </aside>
-
-        <section class="upcoming">
-
-            <header class="header">
-                <h4>Tarefas</h4>
-                <a href="#">Julho <i class='bx bx-chevron-down'></i></a>
-            </header>
-
-            <ul class="dates">
-                <li class="item">
-                    <h5>Se</h5>
-                    <a href="#">12</a>
-                </li>
-                <li class="item active">
-                    <h5>Te</h5>
-                    <a href="#">13</a>
-                </li>
-                <li class="item">
-                    <h5>Qa</h5>
-                    <a href="#">14</a>
-                </li>
-                <li class="item">
-                    <h5>Qi</h5>
-                    <a href="#">15</a>
-                </li>
-                <li class="item">
-                    <h5>Se</h5>
-                    <a href="#">16</a>
-                </li>
-                <li class="item">
-                    <h5>Sa</h5>
-                    <a href="#">17</a>
-                </li>
-                <li class="item">
-                    <h5>Do</h5>
-                    <a href="#">18</a>
-                </li>
-            </ul>
-
-            <section class="events">
-                <article class="item">
-                    <div>
-                        <i class='bx bx-time'></i>
-                        <section class="event-info">
-                            <a href="#">Checagem de fornecedores</a>
-                            <p>10:00</p>
-                        </section>
-                    </div>
-                    <i class='bx bx-dots-horizontal-rounded'></i>
-                </article>
-                <article class="item">
-                    <div>
-                        <i class='bx bx-time'></i>
-                        <section class="event-info">
-                            <a href="#">Mudança do setor de frutas</a>
-                            <p>13:30</p>
-                        </section>
-                    </div>
-                    <i class='bx bx-dots-horizontal-rounded'></i>
-                </article>
-                <article class="item">
-                    <div>
-                        <i class='bx bx-time'></i>
-                        <section class="event-info">
-                            <a href="#">Visita técnica</a>
-                            <p>16:30</p>
-                        </section>
-                    </div>
-                    <i class='bx bx-dots-horizontal-rounded'></i>
-                </article>
-                <article class="item">
-                    <div>
-                        <i class='bx bx-time'></i>
-                        <section class="event-info">
-                            <a href="#">Introduction to SQL</a>
-                            <p>14:00</p>
-                        </section>
-                    </div>
-                    <i class='bx bx-dots-horizontal-rounded'></i>
-                </article>
-            </section>
-
-        </section>
-
-    </main>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="script.js"></script>
+    </div>
 
 </body>
 
