@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <title>Dashboard Design #02 | AsmrProg</title>
+    <title>Terras Mil</title>
 </head>
 
 <body>
@@ -14,15 +14,17 @@
     <header class="top-container">
 
         <nav class="nav">
-            <div class="logo">
-                <img src="Img\Terras Mil Logo.jpg"
-            </div>
+            <header class="logo">
+                <i class='bx bxl-codepen'></i>
+                <a href="#">Terras Mil</a>
+            </header>
+        </nav>
 
             <ul class="nav-links">
                 <li><a href="#">Dashboard</a></li>
-                <li><a href="#">Statistics</a></li>
-                <li><a href="#">Courses</a></li>
-                <li><a href="#">Settings</a></li>
+                <li><a href="#">Produção</a></li>
+                <li><a href="#">Clientes</a></li>
+                <li><a href="#">Fornecedores</a></li>
             </ul>
 
             <section class="right-section">
@@ -31,10 +33,10 @@
 
                 <div class="profile">
                     <section class="info">
-                        <img src="assets/profile.png">
+                        <img src="Img\Ney.jpg">
                         <div>
-                            <a href="#">Alex Johnson</a>
-                            <p>Data Scientist</p>
+                            <a href="#">Neymar</a>
+                            <p>Funcionário</p>
                         </div>
                     </section>
                     <i class='bx bx-chevron-down'></i>
@@ -45,8 +47,8 @@
 
         <section class="status">
             <header class="header">
-                <h4 id="big">Your courses</h4>
-                <h4 id="small">Weekly Activity</h4>
+                <h4 id="big">Produção</h4>
+                <h4 id="small">Semana</h4>
             </header>
 
             <ul class="items-list">
@@ -54,8 +56,10 @@
                     <section class="info">
                         <div>
                             <h5>Hortaliças</h5>
-                            <p>- 3 lessons left</p>
-                            <p>- 1 project left</p>
+                            <p>- Cliente : 1</p>
+
+                            <p>- Fornecedor  : 1</p>
+
                         </div>
                         <i class='bx bx-leaf'></i>
                     </section>
@@ -67,10 +71,12 @@
                     <section class="info">
                         <div>
                             <h5>Verduras</h5>
-                            <p>- 2 assignments left</p>
-                            <p>- 5 tutorials left</p>
+                            <p>- Cliente  : 1</p>
+
+                            <p>- Fornecedor   : 1</p>
+
                         </div>
-                        <i class='bx bx-terminal'></i>
+                        <i class='bx bx-lemon'></i>
                     </section>
                     <div class="progress">
                         <div class="bar"></div>
@@ -79,11 +85,13 @@
                 <li class="item">
                     <section class="info">
                         <div>
-                            <h5>Legumes</h5>
-                            <p>- 4 chapters left</p>
-                            <p>- 8 quizzes left</p>
+                            <h5>Frutas</h5>
+                            <p>- Cliente   : 1</p>
+
+                            <p>- Fornecedor   : 1</p>
+
                         </div>
-                        <i class='bx bxl-python'></i>
+                        <i class='bx bxl-cookie'></i>
                     </section>
                     <div class="progress">
                         <div class="bar"></div>
@@ -102,7 +110,7 @@
 
         <section class="prog-status">
             <header class="header">
-                <h4>Learning Progress</h4>
+                <h4>Produção em toneladas</h4>
                 <nav class="tabs">
                     <a href="#" class="active">1Y</a>
                     <a href="#">6M</a>
@@ -112,13 +120,13 @@
 
             <div class="details">
                 <article class="item">
-                    <h2>3.45</h2>
-                    <p>Current GPA</p>
+                    <h2>3.45 t</h2>
+                    <p>Atual</p>
                 </article>
                 <div class="separator"></div>
                 <article class="item">
-                    <h2>4.78</h2>
-                    <p>Class Average GPA</p>
+                    <h2>4.78 t</h2>
+                    <p>Média</p>
                 </article>
             </div>
 
@@ -128,25 +136,25 @@
 
         <aside class="popular">
             <header class="header">
-                <h4>Popular</h4>
-                <a href="#"># Data</a>
+                <h4>Clientes</h4>
+                <a href="#">Dados</a>
             </header>
 
-            <img src="assets/podcast.jpg" alt="Podcast">
-            <section class="audio">
-                <i class='bx bx-podcast'></i>
-                <a href="#">Podcast: Mastering Data Visualization</a>
+            <img src="Web\Img\OIP.jpg" alt="Produção">
+            <section class="fornecedor">
+                <i class='bx bx-box'></i>
+                <a href="#">Messi: Produção de frutas</a>
             </section>
-            <p>Learn to create compelling visualizations with data.</p>
+            <p>Código do fornecedor: 7j194o </p>
             <footer class="listen">
-                <section class="author">
-                    <img src="assets/profile.png" alt="Author">
+                <section class="client">
+                    <img src="Img\Cris.jpg" alt="Author">
                     <div>
-                        <a href="#">Alex</a>
-                        <p>Data Analyst</p>
+                        <a href="#">Cris</a>
+                        <p>Classe: A</p>
                     </div>
                 </section>
-                <button>Listen<i class='bx bx-right-arrow-alt'></i></button>
+                <button>Ver<i class='bx bx-right-arrow-alt'></i></button>
             </footer>
 
         </aside>
@@ -154,29 +162,29 @@
         <section class="upcoming">
 
             <header class="header">
-                <h4>You may like it</h4>
-                <a href="#">July <i class='bx bx-chevron-down'></i></a>
+                <h4>Tarefas</h4>
+                <a href="#">Julho <i class='bx bx-chevron-down'></i></a>
             </header>
 
             <ul class="dates">
                 <li class="item">
-                    <h5>Mo</h5>
+                    <h5>Se</h5>
                     <a href="#">12</a>
                 </li>
                 <li class="item active">
-                    <h5>Tu</h5>
+                    <h5>Te</h5>
                     <a href="#">13</a>
                 </li>
                 <li class="item">
-                    <h5>We</h5>
+                    <h5>Qa</h5>
                     <a href="#">14</a>
                 </li>
                 <li class="item">
-                    <h5>Th</h5>
+                    <h5>Qi</h5>
                     <a href="#">15</a>
                 </li>
                 <li class="item">
-                    <h5>Fr</h5>
+                    <h5>Se</h5>
                     <a href="#">16</a>
                 </li>
                 <li class="item">
@@ -184,7 +192,7 @@
                     <a href="#">17</a>
                 </li>
                 <li class="item">
-                    <h5>Su</h5>
+                    <h5>Do</h5>
                     <a href="#">18</a>
                 </li>
             </ul>
@@ -194,8 +202,8 @@
                     <div>
                         <i class='bx bx-time'></i>
                         <section class="event-info">
-                            <a href="#">Data Science</a>
-                            <p>10:00-11:30</p>
+                            <a href="#">Checagem de fornecedores</a>
+                            <p>10:00</p>
                         </section>
                     </div>
                     <i class='bx bx-dots-horizontal-rounded'></i>
@@ -204,8 +212,8 @@
                     <div>
                         <i class='bx bx-time'></i>
                         <section class="event-info">
-                            <a href="#">Machine Learning</a>
-                            <p>13:30-15:00</p>
+                            <a href="#">Mudança do setor de frutas</a>
+                            <p>13:30</p>
                         </section>
                     </div>
                     <i class='bx bx-dots-horizontal-rounded'></i>
@@ -214,8 +222,8 @@
                     <div>
                         <i class='bx bx-time'></i>
                         <section class="event-info">
-                            <a href="#">Beginner Python</a>
-                            <p>11:30-13:00</p>
+                            <a href="#">Visita técnica</a>
+                            <p>16:30</p>
                         </section>
                     </div>
                     <i class='bx bx-dots-horizontal-rounded'></i>
@@ -225,7 +233,7 @@
                         <i class='bx bx-time'></i>
                         <section class="event-info">
                             <a href="#">Introduction to SQL</a>
-                            <p>10:00-11:30</p>
+                            <p>14:00</p>
                         </section>
                     </div>
                     <i class='bx bx-dots-horizontal-rounded'></i>
