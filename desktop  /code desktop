@@ -1,0 +1,325 @@
+from kivy.app import App
+from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
+from kivy.uix.textinput import TextInput
+from kivy.uix.label import Label
+from kivy.uix.recycleview import RecycleView
+from kivy.uix.image import Image
+from kivy.uix.popup import Popup
+from kivy.core.window import Window
+import matplotlib.pyplot as plt
+import os
+
+# Configurações da Janela
+Window.size = (800, 600)
+
+# Dados
+clientes_data, fornecedores_data, producao_data, tarefas_data = [], [], [], []
+credentials = {'gerente': 'senha123', 'funcionario': 'senha456'}
+current_user = None
+
+class LoginScreen(Screen):
+    """Tela de Login com campos para nome de usuário e senha"""
+    def __init__(self, **kwargs):
+        super(LoginScreen, self).__init__(**kwargs)
+        layout = BoxLayout(orientation='vertical', padding=40, spacing=20)
+        
+        title = Label(text="Login", font_size=32, bold=True, color=(0, 0, 0, 1), size_hint=(1, 0.3))
+        layout.add_widget(title)
+        
+        self.username_input = TextInput(
+            hint_text='Digite seu nome de usuário', 
+            multiline=False, 
+            size_hint=(1, 0.1), 
+            font_size=18,
+            background_color=(1, 1, 1, 1),
+            foreground_color=(0, 0, 0, 1)
+        )
+        layout.add_widget(self.username_input)
+        
+        self.password_input = TextInput(
+            hint_text='Digite sua senha', 
+            password=True, 
+            multiline=False, 
+            size_hint=(1, 0.1), 
+            font_size=18,
+            background_color=(1, 1, 1, 1),
+            foreground_color=(0, 0, 0, 1)
+        )
+        layout.add_widget(self.password_input)
+        
+        login_button = Button(
+            text='Login', 
+            size_hint=(1, 0.2), 
+            font_size=20, 
+            background_color=(0.2, 0.6, 0.8, 1),
+            color=(1, 1, 1, 1)
+        )
+        login_button.bind(on_press=self.login)
+        layout.add_widget(login_button)
+        
+        self.add_widget(layout)
+
+    def login(self, _):
+        global current_user
+        username = self.username_input.text.strip()
+        password = self.password_input.text.strip()
+        if username in credentials and credentials[username] == password:
+            current_user = username
+            self.manager.current = 'home'
+            self.username_input.text = ''
+            self.password_input.text = ''
+        else:
+            self.show_error_popup()
+
+    def show_error_popup(self):
+        popup = Popup(
+            title='Erro de Login',
+            content=Label(text='Credenciais inválidas! Tente novamente.'),
+            size_hint=(0.6, 0.4)
+        )
+        popup.open()
+
+class HomeScreen(Screen):
+    """Tela principal com botões para gerenciar diferentes seções"""
+    def __init__(self, **kwargs):
+        super(HomeScreen, self).__init__(**kwargs)
+        layout = BoxLayout(orientation='vertical', padding=40, spacing=20)
+        
+        title = Label(text="Menu Principal", font_size=32, bold=True, color=(0, 0, 0, 1), size_hint=(1, 0.2))
+        layout.add_widget(title)
+        
+        # Botões de navegação
+        btn_texts = ['Gerenciar Clientes', 'Gerenciar Fornecedores', 'Gerenciar Produção', 'Gerenciar Tarefas', 'Perfil']
+        btn_screens = ['clientes', 'fornecedores', 'producao', 'tarefas', 'perfil']
+        for text, screen in zip(btn_texts, btn_screens):
+            btn = Button(
+                text=text, 
+                size_hint=(1, 0.1), 
+                font_size=18, 
+                background_color=(0.2, 0.6, 0.8, 1),
+                color=(1, 1, 1, 1)
+            )
+            btn.bind(on_press=lambda instance, s=screen: setattr(self.manager, 'current', s))
+            layout.add_widget(btn)
+        
+        # Botão de Logout
+        logout_btn = Button(
+            text='Logout', 
+            size_hint=(1, 0.1), 
+            font_size=18, 
+            background_color=(1, 0.4, 0.4, 1),
+            color=(1, 1, 1, 1)
+        )
+        logout_btn.bind(on_press=self.logout)
+        layout.add_widget(logout_btn)
+        
+        self.add_widget(layout)
+
+    def logout(self, _):
+        global current_user
+        current_user = None
+        self.manager.current = 'login'
+
+class ProfileScreen(Screen):
+    """Tela de perfil mostrando o usuário atual e seu tipo de conta"""
+    def __init__(self, **kwargs):
+        super(ProfileScreen, self).__init__(**kwargs)
+        layout = BoxLayout(orientation='vertical', padding=40, spacing=20)
+        
+        title = Label(text="Perfil do Usuário", font_size=32, bold=True, color=(0, 0, 0, 1), size_hint=(1, 0.2))
+        layout.add_widget(title)
+        
+        self.username_label = Label(text='', font_size=20, color=(0, 0, 0, 1), size_hint=(1, 0.2))
+        self.role_label = Label(text='', font_size=20, color=(0, 0, 0, 1), size_hint=(1, 0.2))
+        layout.add_widget(self.username_label)
+        layout.add_widget(self.role_label)
+        
+        back_button = Button(
+            text='Voltar', 
+            size_hint=(1, 0.2), 
+            font_size=18, 
+            background_color=(0.2, 0.6, 0.8, 1),
+            color=(1, 1, 1, 1)
+        )
+        back_button.bind(on_press=lambda _: setattr(self.manager, 'current', 'home'))
+        layout.add_widget(back_button)
+        
+        self.add_widget(layout)
+        self.update_profile()
+
+    def update_profile(self):
+        if current_user:
+            self.username_label.text = f'Usuário: {current_user}'
+            self.role_label.text = f'Tipo de Conta: {"Gerente" if current_user == "gerente" else "Funcionário"}'
+
+class DataScreen(Screen):
+    """Classe base para as telas de Clientes, Fornecedores, Produção e Tarefas"""
+    def __init__(self, data, title_text, **kwargs):
+        super(DataScreen, self).__init__(**kwargs)
+        self.data = data
+        
+        layout = BoxLayout(orientation='vertical', padding=40, spacing=20)
+        
+        title = Label(text=title_text, font_size=32, bold=True, color=(0, 0, 0, 1), size_hint=(1, 0.2))
+        layout.add_widget(title)
+        
+        # Input box
+        self.input_box = TextInput(
+            hint_text='Digite um item para incluir...', 
+            multiline=False, 
+            font_size=18, 
+            size_hint=(1, 0.1),
+            background_color=(1, 1, 1, 1),
+            foreground_color=(0, 0, 0, 1)
+        )
+        layout.add_widget(self.input_box)
+        
+        # Botões de ação
+        btn_layout = BoxLayout(size_hint=(1, 0.1), spacing=20)
+        incluir_btn = Button(
+            text='Incluir', 
+            font_size=18, 
+            background_color=(0.2, 0.6, 0.8, 1),
+            color=(1, 1, 1, 1)
+        )
+        incluir_btn.bind(on_press=self.incluir)
+        arquivar_btn = Button(
+            text='Arquivar', 
+            font_size=18, 
+            background_color=(0.2, 0.6, 0.8, 1),
+            color=(1, 1, 1, 1)
+        )
+        arquivar_btn.bind(on_press=self.arquivar)
+        pesquisar_btn = Button(
+            text='Pesquisar', 
+            font_size=18, 
+            background_color=(0.2, 0.6, 0.8, 1),
+            color=(1, 1, 1, 1)
+        )
+        pesquisar_btn.bind(on_press=self.pesquisar)
+        voltar_btn = Button(
+            text='Voltar', 
+            font_size=18, 
+            background_color=(0.6, 0.6, 0.6, 1),
+            color=(1, 1, 1, 1)
+        )
+        voltar_btn.bind(on_press=lambda _: setattr(self.manager, 'current', 'home'))
+        
+        btn_layout.add_widget(incluir_btn)
+        btn_layout.add_widget(arquivar_btn)
+        btn_layout.add_widget(pesquisar_btn)
+        btn_layout.add_widget(voltar_btn)
+        layout.add_widget(btn_layout)
+        
+        # RecycleView para listar os dados
+        self.recycle_view = RecycleView(viewclass='Label', size_hint=(1, 0.4))
+        layout.add_widget(self.recycle_view)
+        
+        # Para ProducaoScreen, adicionar um botão de gráfico e uma imagem
+        if title_text == "Produção":
+            graph_btn = Button(
+                text='Mostrar Gráfico', 
+                size_hint=(1, 0.1), 
+                font_size=18, 
+                background_color=(0.2, 0.6, 0.8, 1),
+                color=(1, 1, 1, 1)
+            )
+            graph_btn.bind(on_press=self.show_graph)
+            layout.add_widget(graph_btn)
+            
+            # Image widget para exibir o gráfico
+            self.graph_image = Image(source='', size_hint=(1, 0.4))
+            layout.add_widget(self.graph_image)
+        
+        self.add_widget(layout)
+        self.update_view()
+    
+    def incluir(self, _):
+        item = self.input_box.text.strip()
+        if item:
+            self.data.append(item)
+            self.input_box.text = ''
+            self.update_view()
+            self.show_popup("Item incluído com sucesso!")
+            if isinstance(self, ProducaoScreen):
+                self.update_graph()
+    
+    def arquivar(self, _):
+        if self.data:
+            self.data.pop()
+            self.update_view()
+            self.show_popup("Item arquivado com sucesso!")
+            if isinstance(self, ProducaoScreen):
+                self.update_graph()
+    
+    def pesquisar(self, _):
+        search_text = self.input_box.text.lower()
+        filtered_data = [item for item in self.data if search_text in item.lower()]
+        self.update_view(filtered_data)
+        if not filtered_data:
+            self.show_popup("Nenhum item encontrado!")
+    
+    def show_popup(self, message):
+        popup = Popup(
+            title='Aviso',
+            content=Label(text=message),
+            size_hint=(0.6, 0.4)
+        )
+        popup.open()
+    
+    def update_view(self, data=None):
+        self.recycle_view.data = [{'text': item} for item in (data or self.data)]
+
+class ProducaoScreen(DataScreen):
+    def __init__(self, **kwargs):
+        super(ProducaoScreen, self).__init__(producao_data, "Produção", **kwargs)
+
+    def update_graph(self):
+        plt.clf()
+        if self.data:
+            items = list(set(self.data))
+            counts = [self.data.count(item) for item in items]
+            plt.bar(items, counts, color='skyblue')
+            plt.xlabel('Itens')
+            plt.ylabel('Quantidade')
+            plt.title('Gráfico de Produção')
+            plt.tight_layout()
+            plt.savefig('producao_graph.png')
+            self.graph_image.source = 'producao_graph.png'
+            self.graph_image.reload()
+
+    def show_graph(self, _):
+        self.update_graph()
+
+class ClientesScreen(DataScreen):
+    def __init__(self, **kwargs):
+        super(ClientesScreen, self).__init__(clientes_data, "Clientes", **kwargs)
+
+class FornecedoresScreen(DataScreen):
+    def __init__(self, **kwargs):
+        super(FornecedoresScreen, self).__init__(fornecedores_data, "Fornecedores", **kwargs)
+
+class TarefasScreen(DataScreen):
+    def __init__(self, **kwargs):
+        super(TarefasScreen, self).__init__(tarefas_data, "Tarefas", **kwargs)
+
+class MyApp(App):
+    def build(self):
+        sm = ScreenManager()
+        screens = [
+            (LoginScreen, 'login'),
+            (HomeScreen, 'home'),
+            (ProfileScreen, 'perfil'),
+            (ClientesScreen, 'clientes'),
+            (FornecedoresScreen, 'fornecedores'), 
+            (ProducaoScreen, 'producao'),
+            (TarefasScreen, 'tarefas')
+        ]
+        for screen, name in screens:
+            sm.add_widget(screen(name=name))
+        return sm
+
+if __name__ == '__main__':
+    MyApp().run()
