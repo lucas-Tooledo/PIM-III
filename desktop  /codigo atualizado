@@ -1,0 +1,325 @@
+from kivy.app import App
+from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
+from kivy.uix.textinput import TextInput
+from kivy.uix.label import Label
+from kivy.uix.recycleview import RecycleView
+from kivy.uix.popup import Popup
+from kivy.uix.image import Image
+from kivy.core.window import Window
+import os
+
+# Configurações da Janela
+Window.size = (900, 700)
+
+# Dados
+clientes_data, fornecedores_data, producao_data, tarefas_data = [], [], [], []
+credentials = {
+    'gerente': {'senha': 'senha123', 'email': 'gerente@empresa.com'},
+    'funcionario': {'senha': 'senha456', 'email': 'funcionario@empresa.com'}
+}
+current_user = None
+
+class LoginScreen(Screen):
+    def __init__(self, **kwargs):
+        super(LoginScreen, self).__init__(**kwargs)
+        layout = BoxLayout(orientation='vertical', padding=20, spacing=20)
+        
+        # Banner com a imagem
+        banner = Image(
+            source='logo.jpg',  # Substitua 'logo.jpg' pelo caminho da sua imagem
+            size_hint=(1, 0.4),
+            allow_stretch=True,
+            keep_ratio=False
+        )
+        layout.add_widget(banner)
+        
+        self.username_input = TextInput(
+            hint_text='Digite seu nome de usuário', 
+            multiline=False, 
+            size_hint=(1, 0.1), 
+            font_size=18,
+            background_color=(0.95, 0.95, 0.95, 1),
+            foreground_color=(0, 0, 0, 1),
+            padding=(10, 10)
+        )
+        layout.add_widget(self.username_input)
+        
+        self.password_input = TextInput(
+            hint_text='Digite sua senha', 
+            password=True, 
+            multiline=False, 
+            size_hint=(1, 0.1), 
+            font_size=18,
+            background_color=(0.95, 0.95, 0.95, 1),
+            foreground_color=(0, 0, 0, 1),
+            padding=(10, 10)
+        )
+        layout.add_widget(self.password_input)
+        
+        login_button = Button(
+            text='Login', 
+            size_hint=(1, 0.15), 
+            font_size=20, 
+            background_color=(0.3, 0.6, 0.8, 1),
+            color=(1, 1, 1, 1),
+            bold=True
+        )
+        login_button.bind(on_press=self.login)
+        layout.add_widget(login_button)
+        
+        self.add_widget(layout)
+
+    def login(self, _):
+        global current_user
+        username = self.username_input.text.strip()
+        password = self.password_input.text.strip()
+        if username in credentials and credentials[username]['senha'] == password:
+            current_user = username
+            self.manager.current = 'home'
+            self.username_input.text = ''
+            self.password_input.text = ''
+            self.show_success_popup('Login realizado com sucesso!')
+        else:
+            self.show_error_popup('Credenciais inválidas! Tente novamente.')
+
+    def show_error_popup(self, message):
+        popup = Popup(
+            title='Erro',
+            content=Label(text=message, font_size=16),
+            size_hint=(0.6, 0.4)
+        )
+        popup.open()
+
+    def show_success_popup(self, message):
+        popup = Popup(
+            title='Sucesso',
+            content=Label(text=message, font_size=16),
+            size_hint=(0.6, 0.4)
+        )
+        popup.open()
+
+class HomeScreen(Screen):
+    def __init__(self, **kwargs):
+        super(HomeScreen, self).__init__(**kwargs)
+        layout = BoxLayout(orientation='vertical', padding=20, spacing=20)
+        
+        # Banner com a imagem
+        banner = Image(
+            source='logo.jpg',  # Substitua 'logo.jpg' pelo caminho da sua imagem
+            size_hint=(1, 0.4),
+            allow_stretch=True,
+            keep_ratio=False
+        )
+        layout.add_widget(banner)
+        
+        btn_texts = ['Gerenciar Clientes', 'Gerenciar Fornecedores', 'Gerenciar Produção', 'Gerenciar Tarefas', 'Perfil']
+        btn_screens = ['clientes', 'fornecedores', 'producao', 'tarefas', 'perfil']
+        for text, screen in zip(btn_texts, btn_screens):
+            btn = Button(
+                text=text, 
+                size_hint=(1, 0.12), 
+                font_size=18, 
+                background_color=(0.3, 0.6, 0.8, 1),
+                color=(1, 1, 1, 1),
+                bold=True
+            )
+            btn.bind(on_press=lambda instance, s=screen: setattr(self.manager, 'current', s))
+            layout.add_widget(btn)
+        
+        logout_btn = Button(
+            text='Logout', 
+            size_hint=(1, 0.12), 
+            font_size=18, 
+            background_color=(0.8, 0.3, 0.3, 1),
+            color=(1, 1, 1, 1),
+            bold=True
+        )
+        logout_btn.bind(on_press=self.logout)
+        layout.add_widget(logout_btn)
+        
+        self.add_widget(layout)
+
+    def logout(self, _):
+        global current_user
+        current_user = None
+        self.manager.current = 'login'
+
+class ProfileScreen(Screen):
+    def __init__(self, **kwargs):
+        super(ProfileScreen, self).__init__(**kwargs)
+        layout = BoxLayout(orientation='vertical', padding=20, spacing=20)
+        
+        # Banner com a imagem
+        banner = Image(
+            source='logo.jpg',  # Substitua 'logo.jpg' pelo caminho da sua imagem
+            size_hint=(1, 0.4),
+            allow_stretch=True,
+            keep_ratio=False
+        )
+        layout.add_widget(banner)
+        
+        self.username_label = Label(text='', font_size=22, color=(0, 0, 0, 1), size_hint=(1, 0.2))
+        self.email_label = Label(text='', font_size=22, color=(0, 0, 0, 1), size_hint=(1, 0.2))
+        self.role_label = Label(text='', font_size=22, color=(0, 0, 0, 1), size_hint=(1, 0.2))
+        layout.add_widget(self.username_label)
+        layout.add_widget(self.email_label)
+        layout.add_widget(self.role_label)
+        
+        back_button = Button(
+            text='Voltar', 
+            size_hint=(1, 0.2), 
+            font_size=20, 
+            background_color=(0.3, 0.6, 0.8, 1),
+            color=(1, 1, 1, 1),
+            bold=True
+        )
+        back_button.bind(on_press=lambda _: setattr(self.manager, 'current', 'home'))
+        layout.add_widget(back_button)
+        
+        self.add_widget(layout)
+        self.update_profile()
+
+    def update_profile(self):
+        if current_user:
+            self.username_label.text = f'Usuário: {current_user}'
+            self.email_label.text = f'Email: {credentials[current_user]["email"]}'
+            self.role_label.text = f'Tipo de Conta: {"Gerente" if current_user == "gerente" else "Funcionário"}'
+
+class DataScreen(Screen):
+    def __init__(self, data, title_text, **kwargs):
+        super(DataScreen, self).__init__(**kwargs)
+        self.data = data
+        
+        layout = BoxLayout(orientation='vertical', padding=20, spacing=20)
+        
+        # Banner com a imagem
+        banner = Image(
+            source='logo.jpg',  # Substitua 'logo.jpg' pelo caminho da sua imagem
+            size_hint=(1, 0.3),
+            allow_stretch=True,
+            keep_ratio=False
+        )
+        layout.add_widget(banner)
+        
+        self.input_box = TextInput(
+            hint_text='Digite um item para incluir...', 
+            multiline=False, 
+            font_size=18, 
+            size_hint=(1, 0.1),
+            background_color=(0.95, 0.95, 0.95, 1),
+            foreground_color=(0, 0, 0, 1),
+            padding=(10, 10)
+        )
+        layout.add_widget(self.input_box)
+        
+        btn_layout = BoxLayout(size_hint=(1, 0.1), spacing=20)
+        incluir_btn = Button(
+            text='Incluir', 
+            font_size=18, 
+            background_color=(0.3, 0.6, 0.8, 1),
+            color=(1, 1, 1, 1),
+            bold=True
+        )
+        incluir_btn.bind(on_press=self.incluir)
+        arquivar_btn = Button(
+            text='Arquivar', 
+            font_size=18, 
+            background_color=(0.8, 0.3, 0.3, 1),
+            color=(1, 1, 1, 1),
+            bold=True
+        )
+        arquivar_btn.bind(on_press=self.arquivar)
+        pesquisar_btn = Button(
+            text='Pesquisar', 
+            font_size=18, 
+            background_color=(0.3, 0.6, 0.8, 1),
+            color=(1, 1, 1, 1),
+            bold=True
+        )
+        pesquisar_btn.bind(on_press=self.pesquisar)
+        
+        btn_layout.add_widget(incluir_btn)
+        btn_layout.add_widget(arquivar_btn)
+        btn_layout.add_widget(pesquisar_btn)
+        
+        layout.add_widget(btn_layout)
+        
+        list_view = RecycleView(size_hint=(1, 0.4))
+        list_view.data = [{'text': str(item)} for item in self.data]
+        layout.add_widget(list_view)
+        
+        back_button = Button(
+            text='Voltar', 
+            size_hint=(1, 0.2), 
+            font_size=20, 
+            background_color=(0.3, 0.6, 0.8, 1),
+            color=(1, 1, 1, 1),
+            bold=True
+        )
+        back_button.bind(on_press=lambda _: setattr(self.manager, 'current', 'home'))
+        layout.add_widget(back_button)
+        
+        self.add_widget(layout)
+
+    def incluir(self, _):
+        item = self.input_box.text.strip()
+        if item:
+            self.data.append(item)
+            self.input_box.text = ''
+            self.update_list()
+            self.show_success_popup('Item incluído com sucesso!')
+        else:
+            self.show_error_popup('Digite um item válido para incluir.')
+
+    def arquivar(self, _):
+        item = self.input_box.text.strip()
+        if item and item in self.data:
+            self.data.remove(item)
+            self.update_list()
+            self.show_success_popup('Item arquivado com sucesso!')
+        else:
+            self.show_error_popup('Item não encontrado para arquivar.')
+
+    def pesquisar(self, _):
+        search_term = self.input_box.text.strip().lower()
+        filtered_data = [item for item in self.data if search_term in item.lower()]
+        self.update_list(filtered_data)
+        self.show_success_popup('Pesquisa concluída!')
+
+    def update_list(self, filtered_data=None):
+        if filtered_data is None:
+            filtered_data = self.data
+        self.children[0].children[0].data = [{'text': str(item)} for item in filtered_data]
+
+    def show_error_popup(self, message):
+        popup = Popup(
+            title='Erro',
+            content=Label(text=message, font_size=16),
+            size_hint=(0.6, 0.4)
+        )
+        popup.open()
+
+    def show_success_popup(self, message):
+        popup = Popup(
+            title='Sucesso',
+            content=Label(text=message, font_size=16),
+            size_hint=(0.6, 0.4)
+        )
+        popup.open()
+
+class MyApp(App):
+    def build(self):
+        sm = ScreenManager()
+        sm.add_widget(LoginScreen(name='login'))
+        sm.add_widget(HomeScreen(name='home'))
+        sm.add_widget(ProfileScreen(name='perfil'))
+        sm.add_widget(DataScreen(clientes_data, 'Gerenciar Clientes', name='clientes'))
+        sm.add_widget(DataScreen(fornecedores_data, 'Gerenciar Fornecedores', name='fornecedores'))
+        sm.add_widget(DataScreen(producao_data, 'Gerenciar Produção', name='producao'))
+        sm.add_widget(DataScreen(tarefas_data, 'Gerenciar Tarefas', name='tarefas'))
+        return sm
+
+if __name__ == '__main__':
+    MyApp().run()
