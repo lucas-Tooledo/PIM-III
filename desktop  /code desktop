@@ -12,7 +12,7 @@ import os
 
 # Configurações da Janela
 Window.size = (800, 600)
-Window.clearcolor = (0.96, 0.96, 0.96, 1)  # Fundo suave
+Window.clearcolor = (1, 1, 1, 1)  # Fundo suave
 
 # Dados
 clientes_data, fornecedores_data, producao_data, tarefas_data = [], [], [], []
@@ -30,8 +30,8 @@ class LoginScreen(Screen):
         # Banner com a imagem
         banner = Image(
             source='logo.jpg',  # Substitua 'logo.jpg' pelo caminho da sua imagem
-            size_hint=(1, 0.4),
-            allow_stretch=True,
+            size_hint=(1, 0.3),
+            allow_stretch=False,
             keep_ratio=False
         )
         layout.add_widget(banner)
@@ -99,7 +99,7 @@ class HomeScreen(Screen):
         banner = Image(
             source='logo.jpg',  # Substitua 'logo.jpg' pelo caminho da sua imagem
             size_hint=(1, 0.3),
-            allow_stretch=True,
+            allow_stretch=False,
             keep_ratio=False
         )
         layout.add_widget(banner)
@@ -145,24 +145,29 @@ class ProfileScreen(Screen):
         banner = Image(
             source='logo.jpg',  
             size_hint=(1, 0.5),
-            allow_stretch=True,
+            allow_stretch=False,
             keep_ratio=False
         )
         layout.add_widget(banner)
         
-        # Labels com informações fictícias do usuário
+        # BoxLayout para envolver os dados do usuário
+        user_data_layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
+        
         self.username_label = Label(text='Padlvo', font_size=20, color=(0, 0, 0, 1), size_hint=(1, 0.2))
         self.email_label = Label(text='Email: gerente@empresa.com', font_size=20, color=(0, 0, 0, 1), size_hint=(1, 0.2))
         self.role_label = Label(text='Tipo de Conta: Gerente', font_size=20, color=(0, 0, 0, 1), size_hint=(1, 0.2))
         self.phone_label = Label(text='Telefone: (12) 3456-7890', font_size=20, color=(0, 0, 0, 1), size_hint=(1, 0.2))
         self.hire_date_label = Label(text='Data de Admissão: 01/01/2023', font_size=20, color=(0, 0, 0, 1), size_hint=(1, 0.2))
         
-        # Adiciona as labels ao layout
-        layout.add_widget(self.username_label)
-        layout.add_widget(self.email_label)
-        layout.add_widget(self.role_label)
-        layout.add_widget(self.phone_label)
-        layout.add_widget(self.hire_date_label)
+        # Adiciona as labels ao layout dos dados do usuário
+        user_data_layout.add_widget(self.username_label)
+        user_data_layout.add_widget(self.email_label)
+        user_data_layout.add_widget(self.role_label)
+        user_data_layout.add_widget(self.phone_label)
+        user_data_layout.add_widget(self.hire_date_label)
+        
+        # Adiciona o layout dos dados do usuário ao layout principal
+        layout.add_widget(user_data_layout)
         
         back_button = Button(
             text='Voltar', 
@@ -195,7 +200,7 @@ class DataScreen(Screen):
         banner = Image(
             source='logo.jpg',  
             size_hint=(1, 0.25),
-            allow_stretch=True,
+            allow_stretch=False,
             keep_ratio=False
         )
         layout.add_widget(banner)
