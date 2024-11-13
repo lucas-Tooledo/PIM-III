@@ -5,16 +5,18 @@ from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
 from kivy.uix.label import Label
 from kivy.uix.recycleview import RecycleView
+from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivy.uix.popup import Popup
 from kivy.uix.image import Image
+from kivy.uix.scrollview import ScrollView
+from kivy.graphics import RoundedRectangle, Color
 from kivy.core.window import Window
+import openpyxl
 import os
 
-# Configurações da Janela
 Window.size = (800, 600)
-Window.clearcolor = (1, 1, 1, 1)  # Fundo suave
+Window.clearcolor = (1, 1, 1, 1)  # Fundo branco
 
-# Dados
 clientes_data, fornecedores_data, producao_data, tarefas_data = [], [], [], []
 credentials = {
     'gerente': {'senha': 'senha123', 'email': 'gerente@empresa.com'},
@@ -22,20 +24,44 @@ credentials = {
 }
 current_user = None
 
+def carregar_dados():
+    global clientes_data, fornecedores_data, producao_data, tarefas_data
+    try:
+        wb = openpyxl.load_workbook("base_dadoss.xlsx")
+        clientes_data = [row[0].value for row in wb['CLIENTE'].iter_rows(min_row=2) if row[0].value]
+        fornecedores_data = [row[0].value for row in wb['FORNECEDOR'].iter_rows(min_row=2) if row[0].value]
+        producao_data = [row[0].value for row in wb['PRODUÇÃO'].iter_rows(min_row=2) if row[0].value]
+        tarefas_data = [row[0].value for row in wb['TAREFAS'].iter_rows(min_row=2) if row[0].value]
+    except FileNotFoundError:
+        print("Arquivo base_dadoss.xlsx não encontrado.")
+
+# Função para salvar dados no Excel
+def salvar_dados():
+    wb = openpyxl.load_workbook("base_dadoss.xlsx")
+    for sheet_name, data in zip(['CLIENTE', 'FORNECEDOR', 'PRODUÇÃO', 'TAREFAS'], 
+                                [clientes_data, fornecedores_data, producao_data, tarefas_data]):
+        sheet = wb[sheet_name]
+        sheet.delete_rows(2, sheet.max_row)  # Limpa dados antigos
+        for i, item in enumerate(data, start=2):
+            sheet.cell(row=i, column=1, value=item)
+    wb.save("base_dadoss.xlsx")
+
+
 class LoginScreen(Screen):
     def __init__(self, **kwargs):
         super(LoginScreen, self).__init__(**kwargs)
         layout = BoxLayout(orientation='vertical', padding=20, spacing=20)
-        
-        # Banner com a imagem
+
+        # Banner with image
         banner = Image(
-            source='logo.jpg',  # Substitua 'logo.jpg' pelo caminho da sua imagem
+            source='logo.jpg',  # Replace with the path to your image
             size_hint=(1, 0.3),
             allow_stretch=False,
             keep_ratio=False
         )
         layout.add_widget(banner)
-        
+
+        # Username input field
         self.username_input = TextInput(
             hint_text='Digite seu nome de usuário', 
             multiline=False, 
@@ -45,7 +71,8 @@ class LoginScreen(Screen):
             foreground_color=(0.15, 0.15, 0.15, 1)
         )
         layout.add_widget(self.username_input)
-        
+
+        # Password input field
         self.password_input = TextInput(
             hint_text='Digite sua senha', 
             password=True, 
@@ -56,7 +83,8 @@ class LoginScreen(Screen):
             foreground_color=(0.15, 0.15, 0.15, 1)
         )
         layout.add_widget(self.password_input)
-        
+
+        # Login button
         login_button = Button(
             text='Login', 
             size_hint=(1, 0.15), 
@@ -67,7 +95,7 @@ class LoginScreen(Screen):
         )
         login_button.bind(on_press=self.login)
         layout.add_widget(login_button)
-        
+
         self.add_widget(layout)
 
     def login(self, _):
@@ -90,23 +118,25 @@ class LoginScreen(Screen):
         )
         popup.open()
 
+
 class HomeScreen(Screen):
     def __init__(self, **kwargs):
         super(HomeScreen, self).__init__(**kwargs)
         layout = BoxLayout(orientation='vertical', padding=15, spacing=15)
-        
-        # Banner com a imagem
+
+        # Banner with image
         banner = Image(
-            source='logo.jpg',  # Substitua 'logo.jpg' pelo caminho da sua imagem
+            source='logo.jpg',  # Replace with the path to your image
             size_hint=(1, 0.3),
             allow_stretch=False,
             keep_ratio=False
         )
         layout.add_widget(banner)
-        
+
+        # Buttons for navigating to different screens
         btn_texts = ['Gerenciar Clientes', 'Gerenciar Fornecedores', 'Gerenciar Produção', 'Gerenciar Tarefas', 'Perfil']
         btn_screens = ['clientes', 'fornecedores', 'producao', 'tarefas', 'perfil']
-        
+
         for text, screen in zip(btn_texts, btn_screens):
             btn = Button(
                 text=text, 
@@ -118,7 +148,8 @@ class HomeScreen(Screen):
             )
             btn.bind(on_press=lambda instance, s=screen: setattr(self.manager, 'current', s))
             layout.add_widget(btn)
-        
+
+        # Logout button
         logout_btn = Button(
             text='Logout', 
             size_hint=(1, 0.12), 
@@ -129,7 +160,7 @@ class HomeScreen(Screen):
         )
         logout_btn.bind(on_press=self.logout)
         layout.add_widget(logout_btn)
-        
+
         self.add_widget(layout)
 
     def logout(self, _):
@@ -137,84 +168,109 @@ class HomeScreen(Screen):
         current_user = None
         self.manager.current = 'login'
 
+
 class ProfileScreen(Screen):
     def __init__(self, **kwargs):
         super(ProfileScreen, self).__init__(**kwargs)
+        
+        # Layout principal
         layout = BoxLayout(orientation='vertical', padding=20, spacing=20)
         
+        # Banner de imagem
         banner = Image(
-            source='logo.jpg',  
-            size_hint=(1, 0.5),
-            allow_stretch=False,
-            keep_ratio=False
+            source='logo.jpg',  # Substitua pelo caminho da sua imagem
+            size_hint=(1, 0.4),
+            allow_stretch=True,
+            keep_ratio=True
         )
         layout.add_widget(banner)
         
-        # BoxLayout para envolver os dados do usuário
-        user_data_layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
+        # Caixa de informações do perfil com estilo de cartão
+        profile_card = BoxLayout(orientation='vertical', padding=20, spacing=15, size_hint=(1, 0.4))
         
-        self.username_label = Label(text='Padlvo', font_size=20, color=(0, 0, 0, 1), size_hint=(1, 0.2))
-        self.email_label = Label(text='Email: gerente@empresa.com', font_size=20, color=(0, 0, 0, 1), size_hint=(1, 0.2))
-        self.role_label = Label(text='Tipo de Conta: Gerente', font_size=20, color=(0, 0, 0, 1), size_hint=(1, 0.2))
-        self.phone_label = Label(text='Telefone: (12) 3456-7890', font_size=20, color=(0, 0, 0, 1), size_hint=(1, 0.2))
-        self.hire_date_label = Label(text='Data de Admissão: 01/01/2023', font_size=20, color=(0, 0, 0, 1), size_hint=(1, 0.2))
+        with profile_card.canvas.before:
+            Color(0.9, 0.9, 0.9, 1)  # Cor de fundo do cartão
+            self.rect = RoundedRectangle(size=profile_card.size, pos=profile_card.pos, radius=[20])
+        profile_card.bind(size=self.update_rect, pos=self.update_rect)
         
-        # Adiciona as labels ao layout dos dados do usuário
-        user_data_layout.add_widget(self.username_label)
-        user_data_layout.add_widget(self.email_label)
-        user_data_layout.add_widget(self.role_label)
-        user_data_layout.add_widget(self.phone_label)
-        user_data_layout.add_widget(self.hire_date_label)
+        # Label de informações
+        self.username_label = Label(text='pdvlod', font_size=22, color=(0.2, 0.2, 0.2, 1))
+        self.email_label = Label(text='gerente@empresa.com', font_size=22, color=(0.2, 0.2, 0.2, 1))
+        self.role_label = Label(text='Tipo: Gerente', font_size=22, color=(0.2, 0.2, 0.2, 1))
+        self.phone_label = Label(text='Tel: 12 98245-9872', font_size=22, color=(0.2, 0.2, 0.2, 1))
+        self.hire_date_label = Label(text='Data de Admissão: 24/04/2024', font_size=22, color=(0.2, 0.2, 0.2, 1))
         
-        # Adiciona o layout dos dados do usuário ao layout principal
-        layout.add_widget(user_data_layout)
+        # Adiciona os elementos ao layout de perfil
+        profile_card.add_widget(self.username_label)
+        profile_card.add_widget(self.email_label)
+        profile_card.add_widget(self.role_label)
+        profile_card.add_widget(self.phone_label)
+        profile_card.add_widget(self.hire_date_label)
         
-        back_button = Button(
-            text='Voltar', 
-            size_hint=(1, 0.15), 
-            font_size=18, 
-            background_color=(0.6, 0.6, 0.6, 1),
-            color=(1, 1, 1, 1)
+        layout.add_widget(profile_card)
+        
+        # Botão Voltar estilizado
+        back_btn = Button(
+            text='Voltar',
+            size_hint=(1, 0.15),
+            font_size=18,
+            background_color=(0.3, 0.5, 0.8, 1),
+            color=(1, 1, 1, 1),
+            bold=True
         )
-        back_button.bind(on_press=lambda _: setattr(self.manager, 'current', 'home'))
-        layout.add_widget(back_button)
+        back_btn.bind(on_press=lambda _: setattr(self.manager, 'current', 'home'))
+        layout.add_widget(back_btn)
         
         self.add_widget(layout)
         self.update_profile()
+
+    def update_rect(self, instance, value):
+        self.rect.size = instance.size
+        self.rect.pos = instance.pos
 
     def update_profile(self):
         if current_user:
             self.username_label.text = f'Usuário: {current_user}'
             self.email_label.text = f'Email: {credentials[current_user]["email"]}'
             self.role_label.text = f'Tipo de Conta: {"Gerente" if current_user == "gerente" else "Funcionário"}'
-            self.phone_label.text = 'Telefone: (12) 3456-7890'  # Exemplo de telefone fictício
-            self.hire_date_label.text = 'Data de Admissão: 01/01/2023'  # Exemplo de data fictícia
+            self.phone_label.text = 'Telefone: (12) 3456-7890'  # Número de telefone de exemplo
+            self.hire_date_label.text = 'Data de Admissão: 01/01/2023'  # Data de admissão de exemplo
+
+class DataRow(RecycleDataViewBehavior, BoxLayout):
+    """Classe que define a estrutura da linha da tabela."""
+    def __init__(self, text, **kwargs):
+        super(DataRow, self).__init__(**kwargs)
+        self.orientation = 'horizontal'
+        label = Label(text=text, color=(0, 0, 0, 1))
+        self.add_widget(label)
+
 
 class DataScreen(Screen):
     def __init__(self, data, title_text, **kwargs):
         super(DataScreen, self).__init__(**kwargs)
         self.data = data
-        
+        self.title_text = title_text
+
         layout = BoxLayout(orientation='vertical', padding=15, spacing=15)
-        
+
         banner = Image(
-            source='logo.jpg',  
+            source='logo.jpg',  # Replace with the path to your image
             size_hint=(1, 0.25),
             allow_stretch=False,
             keep_ratio=False
         )
         layout.add_widget(banner)
-        
+
         self.input_box = TextInput(
-            hint_text='Digite um item para incluir...', 
+            hint_text=f'Digite um item para incluir...', 
             multiline=False, 
-            font_size=16, 
-            size_hint=(1, 0.1),
+            size_hint=(1, 0.1), 
+            font_size=16,
             background_color=(0.95, 0.95, 0.95, 1),
-            foreground_color=(0, 0, 0, 1)
+            foreground_color=(0.15, 0.15, 0.15, 1)
         )
         layout.add_widget(self.input_box)
-        
+
         btn_layout = BoxLayout(size_hint=(1, 0.15), spacing=10)
         incluir_btn = Button(text='Incluir', font_size=16, background_color=(0.2, 0.5, 0.7, 1), color=(1, 1, 1, 1))
         incluir_btn.bind(on_press=self.incluir)
@@ -224,38 +280,39 @@ class DataScreen(Screen):
         pesquisar_btn.bind(on_press=self.pesquisar)
         voltar_btn = Button(text='Voltar', font_size=16, background_color=(0.6, 0.6, 0.6, 1), color=(1, 1, 1, 1))
         voltar_btn.bind(on_press=lambda _: setattr(self.manager, 'current', 'home'))
-        
+
         btn_layout.add_widget(incluir_btn)
         btn_layout.add_widget(arquivar_btn)
         btn_layout.add_widget(pesquisar_btn)
         btn_layout.add_widget(voltar_btn)
-        
+
         layout.add_widget(btn_layout)
-        
+
         self.rv = RecycleView(size_hint=(1, 0.55))
         layout.add_widget(self.rv)
-        
+
         self.add_widget(layout)
+        self.update_view()
 
     def incluir(self, _):
         if self.input_box.text:
             self.data.append(self.input_box.text)
-            self.update_view()
+            self.update_view(self.data)
             self.input_box.text = ''
 
     def arquivar(self, _):
         if self.input_box.text in self.data:
             self.data.remove(self.input_box.text)
-            self.update_view()
+            self.update_view(self.data)
             self.input_box.text = ''
 
     def pesquisar(self, _):
         search_query = self.input_box.text.strip().lower()
         results = [item for item in self.data if search_query in item.lower()]
-        self.update_view(results)
+        self
 
     def update_view(self, data=None):
-        self.rv.data = [{'text': item} for item in (data or self.data)]
+        self.rv.data = [{'text': item} for item in (data if data else self.data)]
 
 class MainApp(App):
     def build(self):
