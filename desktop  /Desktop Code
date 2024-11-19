@@ -127,11 +127,9 @@ def main(page: ft.Page):
 
         # Botões de ação para incluir, arquivar e editar dados
         def abrir_modal_incluir(e):
-            # Implementação da lógica para coletar dados do usuário
             pass
 
         def abrir_modal_editar(e):
-            # Implementação da lógica para editar dados selecionados
             pass
 
         incluir_button = ft.ElevatedButton("Incluir", on_click=abrir_modal_incluir)
